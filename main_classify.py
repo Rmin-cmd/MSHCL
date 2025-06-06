@@ -2,6 +2,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import torch
+from torchmetrics import Precision, Recall, F1Score
 import os
 import scipy.io as sio
 import pickle
@@ -126,6 +127,16 @@ if __name__ == '__main__':
     elif label_type == 3:
         label_type = 'cls3'
         n_vids = 28
+
+    if label_type == 'cls9':
+        n_classes_val_for_metrics = 9
+    elif label_type == 'cls2':
+        n_classes_val_for_metrics = 2
+    elif label_type == 'cls3':
+        n_classes_val_for_metrics = 3
+    else:
+        # This case should ideally not be reached if args.cls is restricted
+        raise ValueError("Invalid number of classes determined for metrics.")
 
     if n_vids == 24:
         save_dir = os.path.join('runs_srt','raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_cls2' % (
@@ -312,6 +323,10 @@ if __name__ == '__main__':
                         #     pickle.dump(results_finetune, f)
 
                     elif train_or_test == 'test':  # HERE MEANS TEST FOR 1-fold in the k-fold process
+                        # Instantiate metrics for each fold
+                        precision_metric = Precision(task='multiclass', num_classes=n_classes_val_for_metrics, average='macro').to(args.device)
+                        recall_metric = Recall(task='multiclass', num_classes=n_classes_val_for_metrics, average='macro').to(args.device)
+                        f1_metric = F1Score(task='multiclass', num_classes=n_classes_val_for_metrics, average='macro').to(args.device)
 
                         best_epoch_file = os.path.join(save_dir_ft,
                                                        val_method + '_' + args.dataset + '_dataset_results_finetune.pkl')
@@ -339,7 +354,28 @@ if __name__ == '__main__':
                             y_batch = y_batch.to(args.device)
                             logits = model(x_batch)
                             _, result = torch.max(logits, dim=1)
+                            precision_metric.update(result, y_batch)
+                            recall_metric.update(result, y_batch)
+                            f1_metric.update(result, y_batch)
                             results.extend(list(result.cpu().numpy()))
+
+                        # Compute and Print Metrics
+                        total_precision = precision_metric.compute()
+                        total_recall = recall_metric.compute()
+                        total_f1 = f1_metric.compute()
+
+                        if val_method == 'loo':
+                            print(f"Fold {fold} / Iteration {iter} (Val sub: {val_sub[0]}) Test Metrics:")
+                        else: # 10_folds
+                            print(f"Fold {fold} Test Metrics:")
+                        print(f"  Precision: {total_precision:.4f}")
+                        print(f"  Recall: {total_recall:.4f}")
+                        print(f"  F1-Score: {total_f1:.4f}")
+
+                        # Reset metrics
+                        precision_metric.reset()
+                        recall_metric.reset()
+                        f1_metric.reset()
 
                         print('Test mode, val_sub:', val_sub)
 
