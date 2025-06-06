@@ -191,6 +191,8 @@ if __name__ == '__main__':
             elif args.dataset in ['both']:
                 # with open(os.path.join(save_dir, 'folds_' + 'all_dataset_both_results_pretrain.pkl'), 'rb') as f:
                 #     results_pretrain = pickle.load(f)
+                results_pretrain = {}
+                results_pretrain['best_epoch'] = list(range(10))
                 results_pretrain['best_epoch'][0] = 19
                 results_pretrain['best_epoch'][1] = 25
                 results_pretrain['best_epoch'][2] = 19
