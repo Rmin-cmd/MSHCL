@@ -90,17 +90,17 @@ if __name__ == '__main__':
     randomInit = False
     stratified = []
 
-    data_dir = r'E:\zzx\Clisa\Validation\Classification_validation\MSHCL_analysis\runs_srt/'
+    data_dir = r'runs_srt'
 
     if args.use_data == 'pretrained':
 
         if label_type == 'cls2':
-            save_dir = data_dir + r'raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_%s' % (
-                args.dataset, args.randSeed, label_type)
+            save_dir = os.path.join(data_dir, r'raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_%s' % (
+                args.dataset, args.randSeed, label_type))
 
         else:
-            save_dir = data_dir + r'raw_28video_batch28_dataset_%s_timeLen%d_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed7_fold10_%s_c0.100000_l1.000000' % (
-                args.dataset, args.timeLen, label_type)
+            save_dir = os.path.join(data_dir, r'raw_28video_batch28_dataset_%s_timeLen%d_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed7_fold10_%s_c0.100000_l1.000000' % (
+                args.dataset, args.timeLen, label_type))
 
     print(save_dir)
 
@@ -189,18 +189,18 @@ if __name__ == '__main__':
                 checkpoint = torch.load(os.path.join(save_dir, str(fold), checkpoint_name), map_location=args.device)
 
             elif args.dataset in ['both']:
-                with open(os.path.join(save_dir, 'folds_' + 'all_dataset_both_results_pretrain.pkl'), 'rb') as f:
-                    results_pretrain = pickle.load(f)
-                # results_pretrain['best_epoch'][0] = 47
-                # results_pretrain['best_epoch'][1] = 25
-                # results_pretrain['best_epoch'][2] = 19
-                # results_pretrain['best_epoch'][3] = 48
-                # results_pretrain['best_epoch'][4] = 25
-                # results_pretrain['best_epoch'][5] = 18
-                # results_pretrain['best_epoch'][6] = 75
-                # results_pretrain['best_epoch'][7] = 36
-                # results_pretrain['best_epoch'][8] = 48
-                # results_pretrain['best_epoch'][9] = 10
+                # with open(os.path.join(save_dir, 'folds_' + 'all_dataset_both_results_pretrain.pkl'), 'rb') as f:
+                #     results_pretrain = pickle.load(f)
+                results_pretrain['best_epoch'][0] = 19
+                results_pretrain['best_epoch'][1] = 25
+                results_pretrain['best_epoch'][2] = 19
+                results_pretrain['best_epoch'][3] = 49
+                results_pretrain['best_epoch'][4] = 42
+                results_pretrain['best_epoch'][5] = 49
+                results_pretrain['best_epoch'][6] = 69
+                results_pretrain['best_epoch'][7] = 46
+                results_pretrain['best_epoch'][8] = 76
+                results_pretrain['best_epoch'][9] = 23
                 # with open(os.path.join(save_dir, 'folds_' + 'all_dataset_both_results_pretrain.pkl'), 'wb') as f:
                 #     pickle.dump(results_pretrain, f)
                 best_pretrain_epoch = int(results_pretrain['best_epoch'][fold])

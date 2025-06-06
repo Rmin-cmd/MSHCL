@@ -44,11 +44,11 @@ elif label_type == 3:
 
 if use_features == 'pretrained':
     if label_type == 'cls2':
-        save_dir = 'runs_srt/raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_%s' % (
-        args.dataset, args.randSeed, label_type)
+        save_dir = os.path.join('runs_srt','raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_%s' % (
+        args.dataset, args.randSeed, label_type))
     elif label_type == 'cls9':
-        save_dir = 'runs_srt/raw_28video_batch28_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_%s_c0.100000_l1.000000' % (
-        args.dataset, args.randSeed, label_type)
+        save_dir = os.path.join('runs_srt', 'raw_28video_batch28_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_%s_c0.100000_l1.000000' % (
+        args.dataset, args.randSeed, label_type))
 
 bn_val = 1
 # rn_momentum = 0.995

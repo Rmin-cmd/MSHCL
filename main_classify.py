@@ -128,11 +128,11 @@ if __name__ == '__main__':
         n_vids = 28
 
     if n_vids == 24:
-        save_dir = './runs_srt/raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_cls2' % (
-        args.dataset, args.randSeed)
+        save_dir = os.path.join('runs_srt','raw_24video_batch24_dataset_%s_timeLen5_tf16_sf16_multiFact2_lr0.000700_wd0.015000_epochs80_randSeed%d_fold10_cls2' % (
+        args.dataset, args.randSeed))
     elif n_vids == 28:
-        save_dir = './runs_srt/raw_28video_batch28_dataset_%s_timeLen5_fold10_%s_c0.100000_l1.000000' % (
-        args.dataset, label_type)
+        save_dir = os.path.join('runs_srt','raw_28video_batch28_dataset_%s_timeLen5_fold10_%s_c0.100000_l1.000000' % (
+        args.dataset, label_type))
 
     print(args)
     print(save_dir)
